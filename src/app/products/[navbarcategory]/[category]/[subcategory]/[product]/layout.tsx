@@ -8,9 +8,10 @@ async function getProduct(slug: string): Promise<any | null> {
 }
 
 export async function generateMetadata({ params }: { 
-  params: { product: string } 
+  params: Promise<{ product: string }> 
 }): Promise<Metadata> {
-  const product = await getProduct(params.product);
+  const { product: slug } = await params;
+  const product = await getProduct(slug);
 
   if (!product || Array.isArray(product)) {
     return {

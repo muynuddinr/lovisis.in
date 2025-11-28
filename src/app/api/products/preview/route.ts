@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import Product from '@/app/models/Product';
+import NavbarCategory from '@/app/models/NavbarCategory';
 
 export async function GET(request: Request) {
   await connectDB();

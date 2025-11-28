@@ -24,6 +24,7 @@ interface NavbarCategory {
   _id: string;
   name: string;
   description?: string;
+  slug: string;
 }
 
 interface NavbarCategoryClientProps {
@@ -57,7 +58,7 @@ const itemVariants = {
     scale: 1,
     transition: {
       duration: 0.4,
-      ease: [0.25, 0.46, 0.45, 0.94],
+      ease: "easeOut",
     },
   },
 };
@@ -69,7 +70,7 @@ const headerVariants = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: [0.25, 0.46, 0.45, 0.94],
+      ease: "easeOut",
     },
   },
 };
@@ -81,7 +82,7 @@ const sectionVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.25, 0.46, 0.45, 0.94],
+      ease: "easeOut",
     },
   },
 };
@@ -99,7 +100,7 @@ export default function NavbarCategoryClient({
     return '_';
   };
 
-  const navbarSlug = safe(params?.navbarcategory, (navbarCategory as any)?.slug);
+  const navbarSlug = safe(params?.navbarcategory, navbarCategory.slug);
   const totalItems = categories.length + uncategorizedProducts.length;
 
   return (

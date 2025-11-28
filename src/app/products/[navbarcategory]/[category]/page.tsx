@@ -53,8 +53,9 @@ async function getProducts(navbarCategoryId: string, categoryId: string) {
   }
 }
 
-export async function generateMetadata({ params }: { params: { navbarcategory: string, category: string } }): Promise<Metadata> {
-  const category = await getCategory(params.category);
+export async function generateMetadata({ params }: { params: Promise<{ navbarcategory: string, category: string }> }): Promise<Metadata> {
+  const { navbarcategory, category: categorySlug } = await params;
+  const category = await getCategory(categorySlug);
   
   if (!category) {
     return {
@@ -70,7 +71,7 @@ export async function generateMetadata({ params }: { params: { navbarcategory: s
       title: `${category.name} | Lovosis Technology Pvt Ltd`,
       description: category.description || `Browse our collection of ${category.name} products`,
       type: 'website',
-      url: `/products/${params.navbarcategory}/${params.category}`,
+      url: `/products/${navbarcategory}/${categorySlug}`,
     }
   };
 }
@@ -78,22 +79,23 @@ export async function generateMetadata({ params }: { params: { navbarcategory: s
 export default async function CategoryPage({
   params
 }: {
-  params: { navbarcategory: string, category: string }
+  params: Promise<{ navbarcategory: string, category: string }>
 }) {
-  const category = await getCategory(params.category);
+  const { navbarcategory, category: categorySlug } = await params;
+  const category = await getCategory(categorySlug);
 
   if (!category) {
     return (
       <div className="container mx-auto px-4 py-12 bg-white text-black">
         <h1 className="text-3xl font-bold mb-8 text-blue-600">Category not found</h1>
         <p className="text-gray-800">
-          The category "{params.category}" does not exist.
+          The category "{categorySlug}" does not exist.
         </p>
         <a
-          href={`/products/${params.navbarcategory}`}
+          href={`/products/${navbarcategory}`}
           className="mt-4 text-blue-600 hover:text-blue-500 hover:underline"
         >
-          &larr; Back to {params.navbarcategory}
+          &larr; Back to {navbarcategory}
         </a>
       </div>
     );
@@ -108,7 +110,7 @@ export default async function CategoryPage({
     '@type': 'CollectionPage',
     name: category.name,
     description: category.description,
-    url: `/products/${params.navbarcategory}/${params.category}`,
+    url: `/products/${navbarcategory}/${categorySlug}`,
     numberOfItems: subcategories.length + products.length,
     itemListElement: [
       ...subcategories.map((subcategory, index) => ({

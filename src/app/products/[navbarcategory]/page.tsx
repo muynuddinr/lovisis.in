@@ -24,8 +24,9 @@ async function getProducts(navbarCategoryId: string) {
   }).sort({ name: 1 }).lean();
 }
 
-export async function generateMetadata({ params }: { params: { navbarcategory: string } }): Promise<Metadata> {
-  const navbarCategory = await getNavbarCategory(params.navbarcategory);
+export async function generateMetadata({ params }: { params: Promise<{ navbarcategory: string }> }): Promise<Metadata> {
+  const { navbarcategory } = await params;
+  const navbarCategory = await getNavbarCategory(navbarcategory);
   
   if (!navbarCategory) {
     return {
@@ -41,7 +42,7 @@ export async function generateMetadata({ params }: { params: { navbarcategory: s
       title: `${navbarCategory.name} | Lovosis Technology Pvt Ltd`,
       description: navbarCategory.description || `Browse our collection of ${navbarCategory.name} products`,
       type: 'website',
-      url: `/products/${params.navbarcategory}`,
+      url: `/products/${navbarcategory}`,
     }
   };
 }
@@ -49,9 +50,10 @@ export async function generateMetadata({ params }: { params: { navbarcategory: s
 export default async function NavbarCategoryPage({
   params
 }: {
-  params: { navbarcategory: string }
+  params: Promise<{ navbarcategory: string }>
 }) {
-  const navbarCategory = await getNavbarCategory(params.navbarcategory);
+  const { navbarcategory } = await params;
+  const navbarCategory = await getNavbarCategory(navbarcategory);
 
   if (!navbarCategory) {
     return <div className="container mx-auto px-4 py-12">Navbar Category not found</div>;
@@ -66,7 +68,7 @@ export default async function NavbarCategoryPage({
     '@type': 'CollectionPage',
     name: navbarCategory.name,
     description: navbarCategory.description,
-    url: `/products/${params.navbarcategory}`,
+    url: `/products/${navbarcategory}`,
     numberOfItems: categories.length + uncategorizedProducts.length,
     itemListElement: [
       ...categories.map((category, index) => ({
@@ -76,7 +78,7 @@ export default async function NavbarCategoryPage({
           '@type': 'Product',
           name: category.name,
           description: category.description,
-          url: `/products/${params.navbarcategory}/${category.slug}`
+          url: `/products/${navbarcategory}/${category.slug}`
         }
       })),
       ...uncategorizedProducts.map((product, index) => ({

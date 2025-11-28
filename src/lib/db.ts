@@ -1,5 +1,22 @@
 import mongoose from 'mongoose';
 
+// Import all models to ensure they are registered
+import '@/app/models/Admin';
+import '@/app/models/Blog';
+import '@/app/models/CatalogRequest';
+import '@/app/models/Category';
+import '@/app/models/Certificate';
+import '@/app/models/Contact';
+import '@/app/models/Event';
+import '@/app/models/File';
+import '@/app/models/Gallery';
+import '@/app/models/NavbarCategory';
+import '@/app/models/Newsletter';
+import '@/app/models/Product';
+import '@/app/models/Registration';
+import '@/app/models/Review';
+import '@/app/models/Subcategory';
+
 let isConnected = false;
 
 export async function connectDB() {

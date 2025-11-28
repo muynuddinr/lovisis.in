@@ -8,6 +8,7 @@ interface Category {
   name: string;
   description?: string;
   navbarCategoryId: string;
+  slug: string;
 }
 
 interface Subcategory {
@@ -47,7 +48,7 @@ export default function CategoryClient({
   };
 
   const navbarSlug = safe(params?.navbarcategory);
-  const categorySlug = safe(params?.category, (category as any)?.slug);
+  const categorySlug = safe(params?.category, category.slug);
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">

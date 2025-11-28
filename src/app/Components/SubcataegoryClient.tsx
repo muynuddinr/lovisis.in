@@ -93,7 +93,7 @@ export default function SubcategoryClient({
 
   const navbarSlug = safe(params?.navbarcategory);
   const categorySlug = safe(params?.category);
-  const subcategorySlug = safe(params?.subcategory, (subcategory as any)?.slug);
+  const subcategorySlug = safe(params?.subcategory, subcategory.slug);
 
   const handleImageLoad = (productId: string) => {
     setLoadedImages(prev => new Set([...prev, productId]));
