@@ -84,6 +84,17 @@ export default function SubcategoryClient({
 }: SubcategoryClientProps) {
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
 
+  // Safe slug helper to avoid `undefined` in URL segments
+  const safe = (val?: string, alt?: string) => {
+    if (val && val !== 'undefined' && val !== 'null') return val;
+    if (alt && alt !== 'undefined' && alt !== 'null') return alt;
+    return '_';
+  };
+
+  const navbarSlug = safe(params?.navbarcategory);
+  const categorySlug = safe(params?.category);
+  const subcategorySlug = safe(params?.subcategory, (subcategory as any)?.slug);
+
   const handleImageLoad = (productId: string) => {
     setLoadedImages(prev => new Set([...prev, productId]));
   };
@@ -127,9 +138,9 @@ export default function SubcategoryClient({
               {products.map((product) => (
                 <InViewAnimation key={product._id}>
                   <Link
-                    href={`/products/${params.navbarcategory}/${params.category}/${params.subcategory}/${product.slug}`}
-                    className="group block"
-                  >
+                      href={`/products/${navbarSlug}/${categorySlug}/${subcategorySlug}/${product.slug}`}
+                      className="group block"
+                    >
                     <div className="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 group-hover:shadow-md border border-gray-200 h-full group-hover:-translate-y-1">
                       {/* Product Image */}
                       <div className="relative h-40 w-full bg-gray-50 overflow-hidden">

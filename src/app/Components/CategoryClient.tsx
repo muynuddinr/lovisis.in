@@ -39,6 +39,15 @@ export default function CategoryClient({
   products,
   params
 }: CategoryClientProps) {
+  // Safe slug helper to avoid interpolating `undefined` into URLs
+  const safe = (val?: string, alt?: string) => {
+    if (val && val !== 'undefined' && val !== 'null') return val;
+    if (alt && alt !== 'undefined' && alt !== 'null') return alt;
+    return '_';
+  };
+
+  const navbarSlug = safe(params?.navbarcategory);
+  const categorySlug = safe(params?.category, (category as any)?.slug);
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
@@ -66,7 +75,7 @@ export default function CategoryClient({
               {subcategories.map((subcategory) => (
                 <Link
                   key={subcategory._id}
-                  href={`/products/${params.navbarcategory}/${params.category}/${subcategory.slug}`}
+                  href={`/products/${navbarSlug}/${categorySlug}/${subcategory.slug}`}
                   className="group block"
                 >
                   <div className="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 group-hover:shadow-md border border-gray-200 h-full group-hover:-translate-y-1">
@@ -115,7 +124,7 @@ export default function CategoryClient({
               {products.map((product) => (
                 <Link
                   key={product._id}
-                  href={`/products/${params.navbarcategory}/${params.category}/_/${product.slug}`}
+                  href={`/products/${navbarSlug}/${categorySlug}/_/${product.slug}`}
                   className="group block"
                 >
                   <div className="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 group-hover:shadow-md border border-gray-200 h-full group-hover:-translate-y-1">

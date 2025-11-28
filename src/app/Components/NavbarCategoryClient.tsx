@@ -92,6 +92,14 @@ export default function NavbarCategoryClient({
   uncategorizedProducts,
   params
 }: NavbarCategoryClientProps) {
+  // Build safe slugs to avoid `undefined` showing up in hrefs
+  const safe = (val?: string, alt?: string) => {
+    if (val && val !== 'undefined' && val !== 'null') return val;
+    if (alt && alt !== 'undefined' && alt !== 'null') return alt;
+    return '_';
+  };
+
+  const navbarSlug = safe(params?.navbarcategory, (navbarCategory as any)?.slug);
   const totalItems = categories.length + uncategorizedProducts.length;
 
   return (
@@ -154,7 +162,7 @@ export default function NavbarCategoryClient({
                   whileTap={{ scale: 0.98 }}
                 >
                   <Link
-                    href={`/products/${params.navbarcategory}/${category.slug}`}
+                    href={`/products/${navbarSlug}/${category.slug}`}
                     className="group block"
                   >
                     <div className="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 group-hover:shadow-md border border-gray-200 h-full">
@@ -216,7 +224,7 @@ export default function NavbarCategoryClient({
                   whileTap={{ scale: 0.98 }}
                 >
                   <Link
-                    href={`/products/${params.navbarcategory}/_/_/${product.slug}`}
+                    href={`/products/${navbarSlug}/_/_/${product.slug}`}
                     className="group block"
                   >
                     <div className="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 group-hover:shadow-md border border-gray-200 h-full">
